@@ -1,3 +1,5 @@
-src/ebean.properties
-src/ebean.properties.local
-src/ebean.properties.remote
+/src/ebean.properties
+/src/ebean.properties.local
+/src/ebean.properties.remote
+/build
+/target
