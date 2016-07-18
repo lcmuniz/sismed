@@ -1,0 +1,30 @@
+<?page title="Login"?>
+<window border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.LoginView')" apply="org.zkoss.bind.BindComposer" self="@{define(content)}">
+
+	<window id="loginWindow" title="Login" width="350px" border="normal" position="center" mode="overlapped">
+
+
+		<vbox align="center" hflex="true">
+			<separator />
+			<hbox align="center">
+				<image src="/img/icon.png" width="100px"></image>
+				<separator />
+				<separator />
+				<vbox>
+					<label value="Sistema" />
+					<textbox id="sistemaTextbox" maxlength="10" cols="10" />
+					<label value="Usuário" />
+					<textbox id="usuarioTextbox" maxlength="10" cols="10" />
+					<label value="Senha" />
+					<textbox id="senhaTextbox" type="password" maxlength="32" cols="10" onOK="@command('login')" />
+				</vbox>
+			</hbox>
+			<separator />
+			<button label="Entrar" iconSclass="z-icon-sign-in" onClick="@command('login')" />
+			<separator />
+		</vbox>
+
+	</window>
+
+</window>
+

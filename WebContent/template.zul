@@ -1,0 +1,47 @@
+<zk xmlns:h="native">
+ 
+ 	<style src="/css/toastr.min.css"/>
+	<script src="/js/toastr.min.js"></script>
+	
+	<borderlayout hflex="true" id="zk_root">
+
+		<north>
+			 
+			<menubar id="menubar">
+				<custom-attributes org.zkoss.zul.image.preload="true" />
+				<menu label="Cadastros" iconSclass="z-icon-keyboard-o">
+					<menupopup>
+						<menuitem label="Clientes" iconSclass="fa fa-users fa-fw" href="/cliente"  />
+						<menuitem label="Consultas" iconSclass="z-icon-calendar" href="/consulta"   />
+						<menuseparator />
+						<menuitem label="Sair" iconSclass="z-icon-sign-out" href="/login" />
+					</menupopup>
+				</menu>
+				<menu label="TISS" iconSclass="fa fa-file-excel-o fa-fw">
+					<menupopup>
+						<menuitem label="Guias de Consultas" href="/guiaconsulta" />
+						<menuitem label="Guias SADT" href="/guiasadt" />
+						<menuitem label="Lotes" href="/lote" />
+					</menupopup>
+				</menu>
+				<menu label="Tabelas Básicas" iconSclass="z-icon-table">
+					<menupopup>
+						<menuitem label="Cids" href="/cid" />
+						<menuitem label="Empresa" iconSclass="z-icon-building" href="/empresa" />
+						<menuitem label="Medicamentos" iconSclass="z-icon-medkit" href="/medicamento" />
+						<menuitem label="Médicos" iconSclass="z-icon-user-md" href="/medico" />
+						<menuitem label="Planos de Saúde" iconSclass="z-icon-heart-o" href="/planosaude" />
+						<menuitem label="Usuários" iconSclass="z-icon-user" href="/usuario" />
+					</menupopup>
+				</menu>
+				<menu label="Relatórios" iconSclass="z-icon-file-text-o">
+					<menupopup>
+						<menuitem label="Consultas" href="/relatorio/consultas.zul" />
+					</menupopup>
+				</menu>
+			</menubar>
+		</north>
+		<center self="@{insert(content)}" border="none" hflex="true" vflex="true"></center>
+	</borderlayout>
+	<!-- <stimer running="true" repeats="true" delay="5000" apply="com.eficaztech.sismed.util.Timer"/> -->
+</zk>

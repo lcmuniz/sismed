@@ -1,0 +1,267 @@
+<window border="normal" width="80%" viewModel="@id('vm')@init('com.eficaztech.sismed.view.EditConsultaView')" apply="org.zkoss.bind.BindComposer">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+			<button iconSclass="z-icon-sign-out" label="Salvar e Fechar" onClick="@command('salvar_fechar')" />
+			<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+			<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<grid zclass="none" id="e_errors">
+		<columns>
+			<column />
+		</columns>
+		<rows>
+			<row zclass="none">
+				<hbox hflex="true">
+					<vbox hflex="true">
+						<label value="Cliente" />
+						<hbox hflex="true">
+							<textbox readonly="true" value="@bind(vm.consultaSelecionada.cliente.nome)" hflex="true" />
+							<button iconSclass="z-icon-search" onClick="@command('verClientes')" />
+						</hbox>
+						<label id="e_cliente" />
+					</vbox>
+					<separator />
+					<vbox hflex="min">
+						<label value="Idade" />
+						<hbox hflex="min">
+							<label value="@bind(vm.consultaSelecionada.cliente.idade)" hflex="min" />
+						</hbox>
+					</vbox>
+					<separator />
+				</hbox>
+			</row>
+			<row zclass="none">
+				<hbox hflex="true">
+					<vbox hflex="true">
+						<label value="Médico" />
+						<combobox id="medicoCombobox" model="@bind(vm.medicos)" selectedItem="@bind(vm.consultaSelecionada.medico)" autodrop="true" hflex="true" />
+						<label id="e_medico" />
+					</vbox>
+				</hbox>
+			</row>
+			<row zclass="none">
+				<hbox hflex="true">
+					<vbox>
+						<label value="Plano de Saúde" />
+						<combobox model="@bind(vm.planos)" selectedItem="@bind(vm.consultaSelecionada.planoSaude)" />
+						<label id="e_planoSaude" />
+					</vbox>
+					<vbox hflex="true">
+						<label value="Modalidade" />
+						<textbox value="@bind(vm.consultaSelecionada.modalidade)" maxlength="30" hflex="true" />
+						<label id="e_modalidade" />
+					</vbox>
+					<vbox>
+						<label value="Carteira" />
+						<textbox value="@bind(vm.consultaSelecionada.carteira)" maxlength="20" cols="30" />
+						<label id="e_carteira" />
+					</vbox>
+					<vbox>
+						<label value="Validade" />
+						<datebox value="@bind(vm.consultaSelecionada.validade)" />
+						<label id="e_validade" />
+					</vbox>
+				</hbox>
+			</row>
+			<row zclass="none">
+				<hbox>
+					<vbox>
+						<label value="Data" />
+						<datebox id="dataDatebox" value="@bind(vm.consultaSelecionada.data)" />
+						<label id="e_data" />
+					</vbox>
+					<vbox>
+						<label value="Hora" />
+						<textbox value="@bind(vm.consultaSelecionada.hora)" maxlength="5" cols="5" />
+						<label id="e_hora" />
+					</vbox>
+					<separator />
+					<separator />
+					<vbox>
+						<label value="Retorno" />
+						<combobox model="@bind(vm.retornos)" selectedItem="@bind(vm.consultaSelecionada.retorno)" />
+					</vbox>
+					<separator />
+					<separator />
+					<vbox>
+						<label value="Procedimento" />
+						<combobox model="@bind(vm.procedimentos)" selectedItem="@bind(vm.consultaSelecionada.procedimento)" />
+					</vbox>
+					<separator />
+					<separator />
+					<vbox>
+						<label value="Status" />
+						<combobox model="@bind(vm.statuss)" selectedItem="@bind(vm.consultaSelecionada.statusConsulta)" autodrop="true" />
+						<label id="e_statusConsulta" />
+					</vbox>
+				</hbox>
+			</row>
+			<row zclass="none">
+				<tabbox>
+					<tabs>
+						<tab id="consultaTab" label="Consulta" />
+						<tab id="condutaTab" label="Conduta" />
+						<tab id="receita1Tab" label="Receita 1" />
+						<tab id="receita2Tab" label="Receita 2" />
+						<tab id="receita3Tab" label="Receita 3" />
+						<tab id="anterioresTab" label="@load(vm.concat('Consultas Anteriores: ', vm.consultaSelecionada.consultasAnteriores.size()))" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<textbox value="@bind(vm.consultaSelecionada.consulta)" rows="10" hflex="true" />
+						</tabpanel>
+						<tabpanel>
+							<textbox value="@bind(vm.consultaSelecionada.conduta)" rows="10" hflex="true" />
+						</tabpanel>
+						<tabpanel>
+							<vbox hflex="true">
+								<groupbox>
+									<hbox>
+										<button iconSclass="z-icon-medkit" label="Medicamentos" onClick="@command('verMedicamentos')" />
+										<button iconSclass="z-icon-print" label="Imprimir" onClick="@command('imprimirReceita1')" />
+									</hbox>
+								</groupbox>
+								<textbox id="receita1Textbox" value="@bind(vm.consultaSelecionada.receita1)" rows="10" hflex="true" />
+							</vbox>
+						</tabpanel>
+						<tabpanel>
+							<vbox hflex="true">
+								<groupbox>
+									<hbox>
+										<button iconSclass="z-icon-medkit" label="Medicamentos" onClick="@command('verMedicamentos')" />
+										<button iconSclass="z-icon-print" label="Imprimir" onClick="@command('imprimirReceita2')" />
+									</hbox>
+								</groupbox>
+								<textbox id="receita2Textbox" value="@bind(vm.consultaSelecionada.receita2)" rows="10" hflex="true" />
+							</vbox>
+						</tabpanel>
+						<tabpanel>
+							<vbox hflex="true">
+								<groupbox>
+									<hbox>
+										<button iconSclass="z-icon-medkit" label="Medicamentos" onClick="@command('verMedicamentos')" />
+										<button iconSclass="z-icon-print" label="Imprimir" onClick="@command('imprimirReceita3')" />
+									</hbox>
+								</groupbox>
+								<textbox id="receita3Textbox" value="@bind(vm.consultaSelecionada.receita3)" rows="10" hflex="true" />
+							</vbox>
+						</tabpanel>
+						<tabpanel>
+							<listbox model="@bind(vm.consultaSelecionada.consultasAnteriores)" height="150px">
+								<listhead>
+									<listheader width="90px" label="Data" />
+									<listheader hflex="min" label="Hora" />
+									<listheader label="Médico" />
+									<listheader hflex="min" label="Plano de Saúde" />
+									<listheader hflex="min" label="Ret." />
+									<listheader hflex="min" label="Proc." />
+									<listheader hflex="min" label="Ações" visible="@load(vm.ehMed)" />
+									<listheader hflex="min" />
+								</listhead>
+								<template name="model" var="ca">
+									<listitem>
+										<listcell label="@load(ca.dataBR)" />
+										<listcell label="@load(ca.hora)" />
+										<listcell label="@load(ca.medico.nome)" />
+										<listcell label="@load(ca.planoSaude.nome)" />
+										<listcell iconSclass="@load(ca.retornoIcon)" />
+										<listcell iconSclass="@load(ca.procedimentoIcon)" />
+										<listcell>
+											<button iconSclass="z-icon-eye" onClick="@command('verDetalhes', id=ca.id)" tooltiptext="Ver detalhes" />
+										</listcell>
+										<listcell />
+									</listitem>
+								</template>
+							</listbox>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</row>
+		</rows>
+	</grid>
+
+	<window id="detalhesWindow" visible="false" width="50%" position="center" title="Dados da Consulta Selecionada">
+		<groupbox>
+			<caption>Consulta</caption>
+			<label id="consultaDetalheLabel" />
+		</groupbox>
+		<groupbox>
+			<caption>Conduta</caption>
+			<label id="condutaDetalheLabel" />
+		</groupbox>
+		<groupbox>
+			<caption>Receita 1</caption>
+			<label id="receita1DetalheLabel" />
+		</groupbox>
+		<groupbox>
+			<caption>Receita 2</caption>
+			<label id="receita2DetalheLabel" />
+		</groupbox>
+		<groupbox>
+			<caption>Receita 3</caption>
+			<label id="receita3DetalheLabel" />
+		</groupbox>
+	</window>
+
+	<window id="clientesWindow" visible="false" width="50%" height="500px" position="center" title="Clientes">
+		<groupbox>
+			<hbox hflex="true">
+				<label value="Procurar por" />
+				<textbox id="filtroClientesTextbox" hflex="true" onOK="@command('pesquisarClientes')" />
+				<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisarClientes')" />
+			</hbox>
+		</groupbox>
+		<hbox vflex="true">
+			<listbox vflex="true" model="@bind(vm.clientes)" selectedItem="@bind(vm.clienteSelecionado)">
+				<listhead>
+					<listheader hflex="true" label="Nome" />
+					<listheader hflex="min" label="Data de Nascimento" />
+					<listheader hflex="min" />
+				</listhead>
+				<template name="model" var="cliSel">
+					<listitem onClick="@command('selecionarCliente')">
+						<listcell label="@load(cliSel.nome)" />
+						<listcell label="@load(cliSel.dataNascimentoBR)" />
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</window>
+
+	<window id="medicamentosWindow" visible="false" width="50%" height="500px" position="center" title="Medicamentos">
+		<groupbox>
+			<hbox hflex="true">
+				<label value="Procurar por" />
+				<textbox id="filtroMedicamentosTextbox" hflex="true" onOK="@command('pesquisarMedicamentos')" />
+				<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisarMedicamentos')" />
+			</hbox>
+		</groupbox>
+		<hbox vflex="true">
+			<listbox vflex="true" model="@bind(vm.medicamentos)" selectedItem="@bind(vm.medicamentoSelecionado)">
+				<listhead>
+					<listheader width="150" label="Código" />
+					<listheader hflex="true" label="Descrição" />
+					<listheader hflex="min" />
+				</listhead>
+				<template name="model" var="med">
+					<listitem>
+						<listcell>
+							<textbox value="@load(med.codigo)" hflex="true" />
+						</listcell>
+						<listcell>
+							<textbox value="@load(med.descricao)" hflex="true" />
+						</listcell>
+						<listcell />
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</window>
+
+</window>

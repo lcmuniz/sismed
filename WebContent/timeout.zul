@@ -1,0 +1,6 @@
+<window width="80%" title="Session Timeout" border="normal">
+	<vbox>
+A página que você requisitou não está mais disponível.
+Normalmente isto acontece por inatividade. Faça login novamente na aplicação.
+	</vbox>
+</window>

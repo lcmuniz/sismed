@@ -1,0 +1,105 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Usuário"?>
+<window id="usuarioWindow" title="Usuário" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.UsuarioView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="usuarioListbox" model="@bind(vm.usuarios)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.usuarioSelecionado)">
+		<listhead>
+			<listheader label="Nome" />
+			<listheader hflex="min" label="Usuário" />
+			<listheader hflex="min" label="Email" />
+			<listheader hflex="min" label="Função" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.nome)" />
+				<listcell label="@load(item.usuario)" />
+				<listcell label="@load(item.email)" />
+				<listcell label="@load(item.funcao.nome)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" width="50%" border="normal">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none" id="e_errors">
+			<columns>
+				<column />
+				<column hflex="min" />
+			</columns>
+			<rows>
+				<row zclass="none">
+					<vbox>
+						<label value="Nome" />
+						<textbox id="nomeTextbox" value="@bind(vm.usuarioSelecionado.nome)" maxlength="50" cols="50" />
+						<label id="e_nome" />
+					</vbox>
+					<vbox>
+						<label value="Usuário" />
+						<textbox value="@bind(vm.usuarioSelecionado.usuario)" maxlength="10" cols="10" />
+						<label id="e_usuario" />
+					</vbox>
+				</row>
+				<row zclass="none">
+					<vbox>
+						<label value="Email" />
+						<textbox value="@bind(vm.usuarioSelecionado.email)" maxlength="30" cols="30" />
+						<label id="e_email" />
+					</vbox>
+					<vbox>
+						<label value="Função" />
+						<combobox model="@bind(vm.funcoes)" selectedItem="@bind(vm.usuarioSelecionado.funcao)" autodrop="true" />
+						<label id="e_funcao" />
+					</vbox>
+				</row>
+				<row zclass="none">
+					<vbox>
+						<label id="senhaLabel" value="Senha *" />
+						<textbox id="senhaTextbox" type="password" maxlength="10" cols="10" />
+						<label id="e_senha" />
+					</vbox>
+
+					<vbox>
+						<label value="Confirmação da Senha" />
+						<textbox id="confirmacaoSenhaTextbox" type="password" maxlength="10" cols="10" />
+						<label id="e_confirmacaoSenha" />
+					</vbox>
+				</row>
+				<row zclass="none" spans="2">
+					<label id="obsLabel" value="* Somente informe uma senha se desejar alterar a senha atual." style="font-style: italic;"/>
+				</row>
+
+			</rows>
+		</grid>
+
+	</window>
+
+</window>
+

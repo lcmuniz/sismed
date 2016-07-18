@@ -1,0 +1,477 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Guia SADT"?>
+<window id="guiaWindow" title="Guia SADT" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.GuiaSADTView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox hflex="true">
+			<button iconSclass="z-icon-plus" label="Nova" onClick="@command('novo')" />
+			<separator />
+			<label value="Cliente" />
+			<textbox id="filtroClienteTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<label value="Entre" />
+			<datebox id="filtroInicioDatebox" onOK="@command('pesquisar')" />
+			<label value="e" />
+			<datebox id="filtroFimDatebox" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="guiaListbox" model="@bind(vm.guias)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.guiaSelecionada)">
+		<listhead>
+			<listheader hflex="min" label="Data de Emissão" />
+			<listheader label="Cliente" />
+			<listheader hflex="min" label="Plano de Saúde" />
+			<listheader hflex="min" label="Número da Guia" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.dataEmissaoGuiaBR)" />
+				<listcell label="@load(item.cliente.nome)" />
+				<listcell label="@load(item.planoSaude.nome)" />
+				<listcell label="@load(item.numeroGuia)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" border="normal" width="80%">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<tabbox id="e_errors">
+			<tabs>
+				<tab id="dadosPrincipaisTab" label="Dados Principais" />
+				<tab label="Procedimentos Executados" />
+				<tab label="Outras Despesas" />
+				<tab label="Observações" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+
+					<grid zclass="none">
+						<columns>
+							<column />
+						</columns>
+						<rows>
+							<row zclass="none">
+								<groupbox>
+									<caption>Dados da Guia</caption>
+									<vbox>
+										<hbox hflex="true">
+											<vbox>
+												<label value="Número da Guia" />
+												<textbox id="numeroGuiaTextbox" value="@bind(vm.guiaSelecionada.numeroGuia)" maxlength="20" cols="20" />
+												<label id="e_numeroGuia" />
+											</vbox>
+											<vbox>
+												<label value="Número da Guia Principal" />
+												<textbox value="@bind(vm.guiaSelecionada.numeroGuiaPrincipal)" maxlength="20" cols="20" />
+											</vbox>
+											<vbox>
+												<label value="Data da Autorização" />
+												<datebox value="@bind(vm.guiaSelecionada.dataAutorizacao)" />
+											</vbox>
+											<vbox>
+												<label value="Senha" />
+												<textbox value="@bind(vm.guiaSelecionada.senha)" maxlength="20" cols="20" />
+											</vbox>
+											<vbox>
+												<label value="Data de Validade da Senha" />
+												<datebox value="@bind(vm.guiaSelecionada.dataValidadeSenha)" />
+											</vbox>
+											<vbox>
+												<label value="Data de Emissão" />
+												<datebox value="@bind(vm.guiaSelecionada.dataEmissaoGuia)" />
+												<label id="e_dataEmissaoGuia" />
+											</vbox>
+										</hbox>
+									</vbox>
+									<vbox>
+										<hbox hflex="true">
+											<vbox>
+												<label value="Médico" />
+												<combobox id="medicoCombobox" model="@bind(vm.medicos)" selectedItem="@bind(vm.guiaSelecionada.medico)" autodrop="true" cols="50" />
+												<label id="e_medico" />
+											</vbox>
+										</hbox>
+									</vbox>
+								</groupbox>
+							</row>
+							<row zclass="none">
+								<groupbox>
+									<caption>Dados do Beneficiário</caption>
+									<hbox hflex="true">
+										<vbox>
+											<label value="Cliente" />
+											<hbox>
+												<textbox readonly="true" value="@bind(vm.guiaSelecionada.cliente.nome)" cols="40" />
+												<button iconSclass="z-icon-search" onClick="@command('verClientes')" />
+											</hbox>
+											<label id="e_cliente" />
+										</vbox>
+										<separator />
+										<separator />
+										<vbox>
+											<label value="Plano de Saúde" />
+											<combobox model="@bind(vm.planos)" selectedItem="@bind(vm.guiaSelecionada.planoSaude)" />
+											<label id="e_planoSaude" />
+										</vbox>
+										<separator />
+										<separator />
+										<vbox>
+											<label value="Carteira" />
+											<textbox value="@bind(vm.guiaSelecionada.carteira)" maxlength="16" cols="16" />
+											<label id="e_carteira" />
+										</vbox>
+										<separator />
+										<separator />
+										<vbox>
+											<label value="Validade" />
+											<datebox value="@bind(vm.guiaSelecionada.validadeCarteira)" />
+											<label id="e_validadeCarteira" />
+										</vbox>
+										<separator />
+										<separator />
+										<vbox>
+											<label value="Atendimento a RN" />
+											<combobox model="@bind(vm.atendimentoRNs)" selectedItem="@bind(vm.guiaSelecionada.atendimentoRN)" />
+										</vbox>
+									</hbox>
+								</groupbox>
+							</row>
+							<row zclass="none">
+								<groupbox>
+									<caption>Dados da Solicitação / Procedimentos e Exames Solicitados / Dados do Atendimento</caption>
+									<vbox>
+										<hbox hflex="true">
+											<vbox>
+												<label value="Data doa Solicitação" />
+												<datebox value="@bind(vm.guiaSelecionada.dataSolicitacao)" />
+												<label id="e_dataSolicitacao" />
+											</vbox>
+											<vbox>
+												<label value="Caráter da Solicitação" />
+												<combobox model="@bind(vm.carateres)" selectedItem="@bind(vm.guiaSelecionada.caraterSolicitacao)" autodrop="true" />
+												<label id="e_caraterSolicitacao" />
+											</vbox>
+											<vbox>
+												<label value="Indicação Clínica" />
+												<textbox value="@bind(vm.guiaSelecionada.indicacaoClinica)" maxlength="100" cols="100" />
+											</vbox>
+										</hbox>
+									</vbox>
+									<vbox>
+										<hbox hflex="true">
+											<vbox>
+												<label value="Tipo de Atendimento" />
+												<combobox model="@bind(vm.tiposAtendimentos)" selectedItem="@bind(vm.guiaSelecionada.tipoAtendimento)" autodrop="true" />
+												<label id="e_tipoAtendimento" />
+											</vbox>
+											<hbox>
+												<vbox>
+													<label value="Indicação de Acidente" />
+													<combobox model="@bind(vm.indicacoes)" selectedItem="@bind(vm.guiaSelecionada.indicacaoAcidente)" autodrop="true" />
+													<label id="e_indicacaoAcidente" />
+												</vbox>
+											</hbox>
+											<hbox>
+												<vbox>
+													<label value="Tipo de Consulta" />
+													<combobox model="@bind(vm.tiposConsultas)" selectedItem="@bind(vm.guiaSelecionada.tipoConsulta)" autodrop="true" />
+													<label id="e_tipoConsulta" />
+												</vbox>
+											</hbox>
+											<hbox>
+												<vbox>
+													<label value="Motivo de Encerramento do Atendimento" />
+													<combobox model="@bind(vm.motivos)" selectedItem="@bind(vm.guiaSelecionada.motivoEncerramentoAtendimento)" autodrop="true" />
+												</vbox>
+											</hbox>
+										</hbox>
+									</vbox>
+								</groupbox>
+							</row>
+						</rows>
+					</grid>
+
+				</tabpanel>
+				<tabpanel>
+					<listbox id="procedimentosListbox" model="@bind(vm.guiaSelecionada.procedimentosExecutados)" selectedItem="@bind(vm.procedimentoSelecionado)" height="400px">
+						<auxhead>
+							<auxheader colspan="10">
+								<hbox>
+									<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novoProcedimento')" />
+								</hbox>
+							</auxheader>
+						</auxhead>
+						<listhead>
+							<listheader width="90px" label="Data" />
+							<listheader hflex="min" label="Tabela" />
+							<listheader hflex="min" label="Cód. Procedimento" />
+							<listheader hflex="true" label="Descrição" />
+							<listheader hflex="min" label="Quantidade" />
+							<listheader hflex="min" label="Fator Red./Acrésc." />
+							<listheader hflex="min" label="Valor Unitário" />
+							<listheader hflex="min" label="Valor Total" />
+							<listheader hflex="min" label="Ações" />
+							<listheader hflex="min" />
+						</listhead>
+						<template name="model" var="proc">
+							<listitem>
+								<listcell label="@load(proc.dataBR)" />
+								<listcell label="@load(proc.tabelaConsulta.codigo)" />
+								<listcell label="@load(proc.codigoProcedimento)" />
+								<listcell label="@load(proc.descricao)" />
+								<listcell label="@load(proc.quantidade)" />
+								<listcell label="@load(proc.fatorReducaoAcrescimo)" />
+								<listcell label="@load(proc.valorUnitario)" />
+								<listcell label="@load(proc.valorTotal)" />
+								<listcell>
+									<button iconSclass="z-icon-edit" onClick="@command('editarProcedimento', id=proc.id, data=proc)" tooltiptext="Editar" />
+								</listcell>
+								<listcell />
+							</listitem>
+						</template>
+					</listbox>
+				</tabpanel>
+				<tabpanel>
+					<listbox id="outrasListbox" model="@bind(vm.guiaSelecionada.outrasDespesas)" selectedItem="@bind(vm.outraDespesaSelecionada)" height="400px">
+						<auxhead>
+							<auxheader colspan="11">
+								<hbox>
+									<button iconSclass="z-icon-plus" label="Nova" onClick="@command('novaOutraDespesa')" />
+								</hbox>
+							</auxheader>
+						</auxhead>
+						<listhead>
+							<listheader width="130px" label="CD" />
+							<listheader width="90px" label="Data" />
+							<listheader hflex="min" label="Tabela" />
+							<listheader hflex="min" label="Cód. Item" />
+							<listheader hflex="true" label="Descrição" />
+							<listheader hflex="min" label="Quantidade" />
+							<listheader hflex="min" label="Fator Red./Acrésc." />
+							<listheader hflex="min" label="Valor Unitário" />
+							<listheader hflex="min" label="Valor Total" />
+							<listheader hflex="min" label="Ações" />
+							<listheader hflex="min" />
+						</listhead>
+						<template name="model" var="outra">
+							<listitem>
+								<listcell label="@load(outra.cd.nome)" />
+								<listcell label="@load(outra.dataBR)" />
+								<listcell label="@load(outra.tabelaConsulta.codigo)" />
+								<listcell label="@load(outra.codigoItem)" />
+								<listcell label="@load(outra.descricao)" />
+								<listcell label="@load(outra.quantidade)" />
+								<listcell label="@load(outra.fatorReducaoAcrescimo)" />
+								<listcell label="@load(outra.valorUnitario)" />
+								<listcell label="@load(outra.valorTotal)" />
+								<listcell>
+									<button iconSclass="z-icon-edit" onClick="@command('editarOutraDespesa', id=outra.id, data=outra)" tooltiptext="Editar" />
+								</listcell>
+								<listcell />
+							</listitem>
+						</template>
+					</listbox>
+				</tabpanel>
+				<tabpanel>
+					<hbox hflex="true">
+						<textbox value="@bind(vm.guiaSelecionada.observacoes)" maxlength="240" rows="5" hflex="true" />
+					</hbox>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+
+	</window>
+
+	<window id="clientesWindow" visible="false" width="50%" height="500px" position="center" title="Clientes">
+		<groupbox>
+			<hbox hflex="true">
+				<label value="Procurar por" />
+				<textbox id="filtroClientesTextbox" hflex="true" onOK="@command('pesquisarClientes')" />
+				<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisarClientes')" />
+			</hbox>
+		</groupbox>
+		<hbox vflex="true">
+			<listbox vflex="true" model="@bind(vm.clientes)" selectedItem="@bind(vm.clienteSelecionado)">
+				<listhead>
+					<listheader hflex="true" label="Nome" />
+					<listheader hflex="min" label="Data de Nascimento" />
+					<listheader hflex="min" />
+				</listhead>
+				<template name="model" var="cliSel">
+					<listitem onClick="@command('selecionarCliente')">
+						<listcell label="@load(cliSel.nome)" />
+						<listcell label="@load(cliSel.dataNascimentoBR)" />
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+	</window>
+
+	<window id="editProcedimentoWindow" visible="false" border="normal" width="50%">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvarProcedimento')" />
+				<button iconSclass="z-icon-trash-o" id="excluirProcedimentoButton" label="Excluir" onClick="@command('excluirProcedimento')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelarProcedimento')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none">
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Data" />
+							<datebox id="dataDatebox" value="@bind(vm.procedimentoSelecionado.data)" />
+							<label id="e_data" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Tabela" />
+							<combobox model="@bind(vm.tabelas)" selectedItem="@bind(vm.procedimentoSelecionado.tabelaConsulta)" autodrop="true" hflex="true" />
+							<label id="e_tabelaConsulta" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Código do Procedimento" />
+							<textbox value="@bind(vm.procedimentoSelecionado.codigoProcedimento)" maxlength="10" cols="10" />
+							<label id="e_codigoProcedimento" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Descrição" />
+							<textbox value="@bind(vm.procedimentoSelecionado.descricao)" maxlength="60" hflex="true" />
+							<label id="e_descricao" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Quantidade" />
+							<intbox value="@bind(vm.procedimentoSelecionado.quantidade)" maxlength="3" cols="3" />
+							<label id="e_quantidade" />
+						</vbox>
+						<vbox>
+							<label value="Fator de Red./Acrésc." />
+							<decimalbox value="@bind(vm.procedimentoSelecionado.fatorReducaoAcrescimo)" maxlength="5" cols="5" format="#,##0.##" />
+							<label id="e_fatorReducaoAcrescimo" />
+						</vbox>
+						<vbox>
+							<label value="Valor Unitário" />
+							<decimalbox value="@bind(vm.procedimentoSelecionado.valorUnitario)" maxlength="10" cols="10" format="#,##0.##" />
+							<label id="e_valorUnitario" />
+						</vbox>
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+
+	<window id="editOutraDespesaWindow" visible="false" border="normal" width="50%">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvarOutraDespesa')" />
+				<button iconSclass="z-icon-trash-o" id="excluirOutraDespesaButton" label="Excluir" onClick="@command('excluirOutraDespesa')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelarOutraDespesa')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none">
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="CD" />
+							<combobox id="cdCombobox" model="@bind(vm.cds)" selectedItem="@bind(vm.outraDespesaSelecionada.cd)" autodrop="true" hflex="true" />
+							<label id="e_cd" />
+						</vbox>
+						<vbox>
+							<label value="Data" />
+							<datebox value="@bind(vm.outraDespesaSelecionada.data)" />
+							<label id="e_data" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Tabela" />
+							<combobox model="@bind(vm.tabelas)" selectedItem="@bind(vm.outraDespesaSelecionada.tabelaConsulta)" autodrop="true" hflex="true" />
+							<label id="e_tabelaConsulta" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Código do Item" />
+							<textbox value="@bind(vm.outraDespesaSelecionada.codigoItem)" maxlength="10" cols="10" />
+							<label id="e_codigoProcedimento" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Descrição" />
+							<textbox value="@bind(vm.outraDespesaSelecionada.descricao)" maxlength="60" hflex="true" />
+							<label id="e_descricao" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Quantidade" />
+							<intbox value="@bind(vm.outraDespesaSelecionada.quantidade)" maxlength="3" cols="3" />
+							<label id="e_quantidade" />
+						</vbox>
+						<vbox>
+							<label value="Unidade de Medida" />
+							<combobox model="@bind(vm.unidades)" selectedItem="@bind(vm.outraDespesaSelecionada.unidadeMedida)" autodrop="true" hflex="true" />
+							<label id="e_unidadeMedida" />
+						</vbox>
+						<vbox>
+							<label value="Fator de Red./Acrésc." />
+							<decimalbox value="@bind(vm.outraDespesaSelecionada.fatorReducaoAcrescimo)" maxlength="5" cols="5" format="#,##0.##" />
+							<label id="e_fatorReducaoAcrescimo" />
+						</vbox>
+						<vbox>
+							<label value="Valor Unitário" />
+							<decimalbox value="@bind(vm.outraDespesaSelecionada.valorUnitario)" maxlength="10" cols="10" format="#,##0.##" />
+							<label id="e_valorUnitario" />
+						</vbox>
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+
+</window>
+

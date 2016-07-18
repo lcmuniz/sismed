@@ -1,0 +1,66 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Medicamento"?>
+<window id="medicamentoWindow" title="Medicamento" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.MedicamentoView')"
+	apply="org.zkoss.bind.BindComposer" self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="_ Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="medicamentoListbox" model="@bind(vm.medicamentos)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.medicamentoSelecionado)">
+		<listhead>
+			<listheader hflex="min" label="Código" />
+			<listheader label="Descrição" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.codigo)" />
+				<listcell label="@load(item.descricao)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar"/>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" width="50%" border="normal">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<box>
+			<vbox>
+				<label value="Código" />
+				<textbox id="codigoTextbox" value="@bind(vm.medicamentoSelecionado.codigo)" maxlength="50" cols="50" />
+				<label id="e_codigo" />
+			</vbox>
+
+			<vbox>
+				<label value="Descrição" />
+				<textbox value="@bind(vm.medicamentoSelecionado.descricao)" maxlength="200" cols="90" rows="5" />
+				<label id="e_descricao" />
+			</vbox>
+
+		</box>
+
+	</window>
+
+</window>
+

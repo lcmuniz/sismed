@@ -1,0 +1,182 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Cliente"?>
+<window id="clienteWindow" title="Cliente" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.ClienteView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="clienteListbox" model="@bind(vm.clientes)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.clienteSelecionado)">
+		<listhead>
+			<listheader label="Nome" />
+			<listheader hflex="min" label="Idade" />
+			<listheader hflex="min" label="Data de Nascimento" />
+			<listheader hflex="min" label="Plano de Saúde" />
+			<listheader hflex="min" label="Ações" align="center" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.nome)" />
+				<listcell label="@load(item.idade)" />
+				<listcell label="@load(item.dataNascimentoBR)" />
+				<listcell label="@load(item.planoSaude.nome)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+					<button iconSclass="z-icon-calendar" onClick="@command('novaConsulta', id=item.id)" tooltiptext="Nova Consulta" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" border="normal" width="80%">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none" id="e_errors">
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Nome" />
+							<textbox id="nomeTextbox" value="@bind(vm.clienteSelecionado.nome)" maxlength="100" hflex="true" />
+							<label id="e_nome" />
+						</vbox>
+
+						<vbox>
+							<label value="Data de Nascimento" />
+							<datebox value="@bind(vm.clienteSelecionado.dataNascimento)" />
+							<label id="e_dataNascimento" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Plano de Saúde" />
+							<combobox model="@bind(vm.planos)" selectedItem="@bind(vm.clienteSelecionado.planoSaude)" />
+							<label id="e_planoSaude" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Modalidade" />
+							<textbox value="@bind(vm.clienteSelecionado.modalidade)" maxlength="50"  hflex="true" />
+							<label id="e_modalidade" />
+						</vbox>
+						<vbox>
+							<label value="Carteira" />
+							<textbox value="@bind(vm.clienteSelecionado.carteira)" maxlength="30" cols="30" />
+							<label id="e_carteira" />
+						</vbox>
+						<vbox>
+							<label value="Validade" />
+							<datebox value="@bind(vm.clienteSelecionado.validade)" />
+							<label id="e_validade" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Telefones" />
+							<textbox value="@bind(vm.clienteSelecionado.telefones)" maxlength="50"  hflex="true" />
+							<label id="e_telefones" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Filiação" />
+							<textbox value="@bind(vm.clienteSelecionado.filiacao)" maxlength="100" hflex="true" />
+							<label id="e_filiacao" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Profissão" />
+							<textbox value="@bind(vm.clienteSelecionado.profissao)" maxlength="100" hflex="true" />
+							<label id="e_profissao" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Endereço" />
+							<textbox value="@bind(vm.clienteSelecionado.endereco)" maxlength="100"  hflex="true" />
+							<label id="e_endereco" />
+						</vbox>
+						<vbox>
+							<label value="CEP" />
+							<textbox value="@bind(vm.clienteSelecionado.cep)" maxlength="8" cols="8" />
+							<label id="e_cep" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox hflex="true">
+							<label value="Cidade" />
+							<textbox value="@bind(vm.clienteSelecionado.cidade)" maxlength="50"  hflex="true" />
+							<label id="e_cidade" />
+						</vbox>
+						<vbox>
+							<label value="Estado" />
+							<combobox model="@bind(vm.estados)" selectedItem="@bind(vm.clienteSelecionado.estado)" autodrop="true" />
+							<label id="e_estado" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Identidade" />
+							<textbox value="@bind(vm.clienteSelecionado.identidade)" maxlength="20" cols="20" />
+							<label id="e_identidade" />
+						</vbox>
+						<vbox>
+							<label value="Cartão Nacional de Saúde" />
+							<textbox value="@bind(vm.clienteSelecionado.cartaoNacionalSaude)" maxlength="20" cols="20" />
+							<label id="e_cartaoNacionalSaude" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Email" />
+							<textbox value="@bind(vm.clienteSelecionado.email)" maxlength="100"  hflex="true" />
+							<label id="e_email" />
+						</vbox>
+						<vbox hflex="true">
+							<label value="Indicação" />
+							<textbox value="@bind(vm.clienteSelecionado.indicacao)" maxlength="50"  hflex="true" />
+							<label id="e_indicacao" />
+						</vbox>
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+
+</window>
+

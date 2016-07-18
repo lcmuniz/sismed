@@ -1,0 +1,130 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Médico"?>
+<window id="medicoWindow" title="Médico" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.MedicoView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="_ Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="medicoListbox" model="@bind(vm.medicos)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.medicoSelecionado)">
+		<listhead>
+			<listheader label="Nome" />
+			<listheader hflex="min" label="Especialidade" />
+			<listheader hflex="min" label="Usuário" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.nome)" />
+				<listcell label="@load(item.especialidade)" />
+				<listcell label="@load(item.usuario.usuario)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" width="55%" border="normal">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none" id="e_errors">
+			<columns>
+				<column />
+				<column hflex="min" />
+				<column hflex="min" />
+
+			</columns>
+			<rows>
+				<row zclass="none">
+					<vbox>
+						<label value="Nome" />
+						<textbox id="nomeTextbox" value="@bind(vm.medicoSelecionado.nome)" maxlength="50" cols="50" />
+						<label id="e_nome" />
+					</vbox>
+
+					<vbox>
+						<label value="CPF" />
+						<textbox id="cpfTextbox" value="@bind(vm.medicoSelecionado.cpf)" maxlength="11" cols="11" />
+						<label id="e_cpf" />
+					</vbox>
+
+					<vbox>
+						<label value="Usuário" />
+						<combobox model="@bind(vm.usuarios)" selectedItem="@bind(vm.medicoSelecionado.usuario)" autodrop="true" />
+						<label id="e_usuario" />
+					</vbox>
+				</row>
+				<row zclass="none">
+					<vbox>
+						<label value="Conselho Profissional" />
+						<combobox cols="40" model="@bind(vm.conselhos)" selectedItem="@bind(vm.medicoSelecionado.conselhoProfissional)" autodrop="true" />
+						<label id="e_conselhoProfissional" />
+					</vbox>
+
+					<vbox>
+						<label value="Número" />
+						<textbox value="@bind(vm.medicoSelecionado.numeroConselho)" maxlength="10" cols="10" />
+						<label id="e_numeroConselho" />
+					</vbox>
+
+					<vbox>
+						<label value="Estado" />
+						<combobox model="@bind(vm.estados)" selectedItem="@bind(vm.medicoSelecionado.estadoConselho)" autodrop="true" />
+						<label id="e_estadoConselho" />
+					</vbox>
+
+				</row>
+				<row zclass="none">
+					<vbox>
+						<label value="Especialidade" />
+						<textbox value="@bind(vm.medicoSelecionado.especialidade)" maxlength="30" cols="30" />
+						<label id="e_especialidade" />
+					</vbox>
+
+					<vbox>
+						<label value="Número CNES" />
+						<textbox value="@bind(vm.medicoSelecionado.numeroCNES)" maxlength="10" cols="10" />
+						<label id="e_numeroCNES" />
+					</vbox>
+
+					<vbox>
+						<label value="CBOS" />
+						<textbox value="@bind(vm.medicoSelecionado.cbos)" maxlength="10" cols="10" />
+						<label id="e_cbos" />
+					</vbox>
+
+				</row>
+				<row zclass="none" spans="3">
+					<vbox>
+						<label value="Receita" />
+						<textbox value="@bind(vm.medicoSelecionado.receita)" maxlength="20" cols="20" />
+						<label id="e_receita" />
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+
+</window>
+

@@ -1,0 +1,66 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="CID"?>
+<window id="cidWindow" title="CID" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.CidView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="cidListbox" model="@bind(vm.cids)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.cidSelecionado)">
+		<listhead>
+			<listheader hflex="min" label="CID" />
+			<listheader label="Descrição" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.cid)" />
+				<listcell label="@load(item.descricao)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar"/>
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" width="50%" border="normal">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<box>
+			<vbox>
+				<label value="CID" />
+				<textbox id="cidTextbox" value="@bind(vm.cidSelecionado.cid)" maxlength="5" cols="5" />
+				<label id="e_cid" />
+			</vbox>
+
+			<vbox>
+				<label value="Descrição" />
+				<textbox value="@bind(vm.cidSelecionado.descricao)" maxlength="50" cols="50" />
+				<label id="e_descricao" />
+			</vbox>
+
+		</box>
+
+	</window>
+
+</window>
+

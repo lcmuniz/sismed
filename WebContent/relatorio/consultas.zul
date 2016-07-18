@@ -1,0 +1,43 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Consultas"?>
+<window id="consultasWindow" title="Consultas" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.relatorio.ConsultasView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<window id="editWindow" title="Consultas" width="50%" border="normal" position="center, center" mode="overlapped">
+
+		<grid style="padding:10px; border:none">
+			<columns>
+				<column hflex="min" />
+				<column hflex="true" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Médico" />
+					<combobox id="medicoCombobox" model="@bind(vm.medicos)" selectedItem="@bind(vm.medico)" autodrop="true" hflex="true" />
+				</row>
+				<row>
+					<label value="Entre" />
+					<hbox>
+						<datebox id="inicioDatebox" onOK="@command('pesquisar')" />
+						<label value="e" />
+						<datebox id="fimDatebox" onOK="@command('pesquisar')" />
+						<separator />
+						<checkbox id="mostrarRetornosCheckbox" label="Mostrar retornos" />
+					</hbox>
+				</row>
+				<row>
+					<label />
+					<button iconSclass="z-icon-print" label="Imprimir" onClick="@command('imprimir')" />
+				</row>
+			</rows>
+
+
+
+		</grid>
+
+
+
+	</window>
+
+</window>
+

@@ -1,0 +1,75 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Empresa"?>
+<window id="empresaWindow" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.EmpresaView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<window id="editWindow" title="Empresa" position="center" visible="false" width="70%" border="normal">
+	
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+
+		<grid zclass="none" id="e_errors">
+			<columns>
+				<column />
+				<column hflex="min" />
+				<column hflex="min" />
+			</columns>
+			<rows>
+				<row zclass="none" spans="3">
+					<vbox>
+						<label value="Nome" />
+						<textbox id="nomeTextbox" value="@bind(vm.empresaSelecionada.nome)" maxlength="50" cols="50" />
+						<label id="e_nome" />
+					</vbox>
+				</row>
+				<row zclass="none" spans="2,1">
+					<vbox>
+						<label value="Endereço" />
+						<textbox value="@bind(vm.empresaSelecionada.endereco)" maxlength="100" cols="100" />
+						<label id="e_endereco" />
+					</vbox>
+
+					<vbox>
+						<label value="CEP" />
+						<textbox value="@bind(vm.empresaSelecionada.cep)" maxlength="8" cols="8" />
+						<label id="e_cep" />
+					</vbox>
+				</row>
+				<row zclass="none">
+					<vbox>
+						<label value="Município" />
+						<textbox value="@bind(vm.empresaSelecionada.municipio)" maxlength="20" cols="20" />
+						<label id="e_municipio" />
+					</vbox>
+					<vbox>
+						<label value="Estado" />
+						<combobox model="@bind(vm.estados)" selectedItem="@bind(vm.empresaSelecionada.estado)" autodrop="true" />
+						<label id="e_estado" />
+					</vbox>
+					<vbox>
+						<label value="Codigo do IBGE" />
+						<textbox value="@bind(vm.empresaSelecionada.codigoIBGE)" maxlength="10" cols="10" />
+						<label id="e_codigoIBGE" />
+					</vbox>
+				</row>
+				<row zclass="none" spans="3">
+					<vbox>
+						<label value="Telefones" />
+						<textbox value="@bind(vm.empresaSelecionada.telefones)" maxlength="50" cols="50" />
+						<label id="e_telefones" />
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+		
+	</window>
+	
+</window>
+

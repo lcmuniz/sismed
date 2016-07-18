@@ -1,0 +1,250 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Lote"?>
+<window title="Lote" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.LoteView')" apply="org.zkoss.bind.BindComposer" self="@{define(content)}">
+
+	<groupbox>
+		<hbox hflex="true">
+			<hbox vflex="true" align="center,center">
+				<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			</hbox>
+			<separator />
+			<vbox>
+				<label value="Tipo de Lote" />
+				<combobox id="filtroTipoConsultaCombobox" value="CONSULTA">
+					<comboitem label="CONSULTA" />
+					<comboitem label="SADT" />
+				</combobox>
+			</vbox>
+			<vbox>
+				<label value="Médico" />
+				<combobox id="filtroMedicoCombobox" model="@bind(vm.medicos)" autodrop="true" cols="50" />
+			</vbox>
+			<vbox>
+				<label value="Plano de Saúde" />
+				<combobox id="filtroPlanoSaudeCombobox" model="@bind(vm.planos)" autodrop="true" cols="50" />
+			</vbox>
+			<vbox>
+				<html><![CDATA[<br/>]]></html>
+				<hbox>
+					<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+				</hbox>
+			</vbox>
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox model="@bind(vm.lotes)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.loteSelecionado)">
+		<listhead>
+			<listheader hflex="min" label="Data de Envio" />
+			<listheader hflex="min" label="Número do Lote" />
+			<listheader label="Tipo de Lote" />
+			<listheader label="Médico" />
+			<listheader label="Plano de Saúde" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.dataEnvioBR)" />
+				<listcell label="@load(item.numeroLote)" />
+				<listcell label="@load(item.tipoLote)" />
+				<listcell label="@load(item.medico.nome)" />
+				<listcell label="@load(item.planoSaude.nome)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+					<button iconSclass="z-icon-download" onClick="@command('download', id=item.id)" tooltiptext="Download" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" border="normal" width="80%">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<grid zclass="none" id="e_errors">
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row zclass="none">
+					<hbox hflex="true">
+						<vbox>
+							<label value="Data de Envio" />
+							<datebox id="dataEnvioDatebox" value="@bind(vm.loteSelecionado.dataEnvio)" />
+							<label id="e_dataEnvio" />
+						</vbox>
+						<vbox>
+							<label value="Número do Lote" />
+							<intbox value="@bind(vm.loteSelecionado.numeroLote)" />
+							<label id="e_numeroLote" />
+						</vbox>
+						<vbox>
+							<label value="Tipo de Lote" />
+							<combobox id="tipoConsultaCombobox" value="@bind(vm.loteSelecionado.tipoLote)" onChange="@command('alterarTipoConsulta')">
+								<comboitem label="CONSULTA" />
+								<comboitem label="SADT" />
+							</combobox>
+							<label id="e_tipoLote" />
+						</vbox>
+						<vbox>
+							<label value="Médico" />
+							<combobox model="@bind(vm.medicos)" selectedItem="@bind(vm.loteSelecionado.medico)" autodrop="true" cols="50" />
+							<label id="e_medico" />
+						</vbox>
+						<vbox>
+							<label value="Plano de Saúde" />
+							<combobox model="@bind(vm.planos)" selectedItem="@bind(vm.loteSelecionado.planoSaude)" />
+							<label id="e_planoSaude" />
+						</vbox>
+					</hbox>
+				</row>
+				<row zclass="none" id="guiaConsultaRow">
+					<vbox hflex="true">
+
+						<groupbox hflex="true">
+							<caption label="@bind(vm.loteSelecionado.captionGuiasConsulta)"/>
+							<hbox>
+								<button label="Adicionar/Remover Guias" onClick="@command('verGuiasConsulta')" />
+								<button label="Remover Todas" onClick="@command('removerGuiasConsulta')" />
+							</hbox>
+							<separator />
+							
+							<listbox model="@bind(vm.loteSelecionado.guiasConsulta)" height="350px">
+								<listhead>
+									<listheader hflex="min" label="Data de Emissão" />
+									<listheader hflex="min" label="Número da Guia" />
+									<listheader hflex="max" label="Cliente" />
+									<listheader hflex="min" />
+								</listhead>
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.dataEmissaoGuiaBR)" />
+										<listcell label="@load(item.numeroGuia)" />
+										<listcell label="@load(item.cliente.nome)" />
+										<listcell />
+									</listitem>
+								</template>
+							</listbox>
+							
+						</groupbox>
+					</vbox>
+				</row>
+				<row zclass="none" id="guiaSADTRow" visible="false">
+					<vbox hflex="true">
+
+						<groupbox hflex="true">
+							<caption label="@bind(vm.loteSelecionado.captionGuiasSADT)"/>
+							<hbox>
+								<button label="Adicionar/Remover Guias" onClick="@command('verGuiasSADT')" />
+								<button label="Remover Todas" onClick="@command('removerGuiasSADT')" />
+							</hbox>
+							<separator />
+							
+							<listbox model="@bind(vm.loteSelecionado.guiasSADT)" height="350px">
+								<listhead>
+									<listheader hflex="min" label="Data de Emissão" />
+									<listheader hflex="min" label="Número da Guia" />
+									<listheader hflex="max" label="Cliente" />
+									<listheader hflex="min" />
+								</listhead>
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.dataEmissaoGuiaBR)" />
+										<listcell label="@load(item.numeroGuia)" />
+										<listcell label="@load(item.cliente.nome)" />
+										<listcell />
+									</listitem>
+								</template>
+							</listbox>
+							
+						</groupbox>
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+
+	<window id="guiasConsultaWindow" title="Adicionar/Remover Guias de Consulta" visible="false" border="normal" width="50%" height="500px">
+		<groupbox>
+			<hbox>
+				<label value="Entre" />
+				<datebox id="filtroInicioConsultaDatebox" />
+				<label value="e" />
+				<datebox id="filtroFimConsultaDatebox" />
+				<button label="Pesquisar" onClick="@command('pesquisarGuiasConsulta')" />
+			</hbox>
+		</groupbox>
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" tooltiptext="Adicionar guias marcadas ao lote" onClick="@command('adicionarGuiasConsultaMarcadas')" />
+				<button iconSclass="z-icon-cancel" label="Cancelar" onClick="@command('cancelarAdicionarGuiasConsulta')" />
+			</hbox>
+		</groupbox>
+		<listbox model="@bind(vm.guiasConsulta)" vflex="true" checkmark="true" multiple="true" selectedItems="@bind(vm.guiasConsultaSelecionadas)">
+			<listhead>
+				<listheader hflex="min" />
+				<listheader hflex="min" label="Data de Emissão" />
+				<listheader hflex="min" label="Número da Guia" />
+				<listheader hflex="max" label="Cliente" />
+				<listheader hflex="min" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell />
+					<listcell label="@load(item.dataEmissaoGuiaBR)" />
+					<listcell label="@load(item.numeroGuia)" />
+					<listcell label="@load(item.cliente.nome)" />
+					<listcell />
+				</listitem>
+			</template>
+		</listbox>
+	</window>
+	
+	<window id="guiasSADTWindow" title="Adicionar/Remover Guias SADT" visible="false" border="normal" width="50%"  height="500px">
+		<groupbox>
+			<hbox>
+				<label value="Entre" />
+				<datebox id="filtroInicioSADTDatebox" />
+				<label value="e" />
+				<datebox id="filtroFimSADTDatebox" />
+				<button label="Pesquisar" onClick="@command('pesquisarGuiasSADT')" />
+			</hbox>
+		</groupbox>
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" tooltiptext="Adicionar guias marcadas ao lote" onClick="@command('adicionarGuiasSADTMarcadas')" />
+				<button iconSclass="z-icon-cancel" label="Cancelar" onClick="@command('cancelarAdicionarGuiasSADT')" />
+			</hbox>
+		</groupbox>
+		<listbox model="@bind(vm.guiasSADT)" vflex="true" checkmark="true" multiple="true" selectedItems="@bind(vm.guiasSADTSelecionadas)">
+			<listhead>
+				<listheader hflex="min" />
+				<listheader hflex="min" label="Data de Emissão" />
+				<listheader hflex="min" label="Número da Guia" />
+				<listheader hflex="max" label="Cliente" />
+				<listheader hflex="min" />
+			</listhead>
+			<template name="model" var="item">
+				<listitem>
+					<listcell />
+					<listcell label="@load(item.dataEmissaoGuiaBR)" />
+					<listcell label="@load(item.numeroGuia)" />
+					<listcell label="@load(item.cliente.nome)" />
+					<listcell />
+				</listitem>
+			</template>
+		</listbox>
+	</window>
+
+</window>
+

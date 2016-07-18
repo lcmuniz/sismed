@@ -1,0 +1,20 @@
+datasource.default=fatima
+datasource.fatima.username=root
+datasource.fatima.password=eficaztecnologia2015
+datasource.fatima.databaseUrl=jdbc:mysql://localhost/sismed
+datasource.fatima.databaseDriver=com.mysql.jdbc.Driver
+datasource.fatima.minConnections=1
+datasource.fatima.maxConnections=25
+datasource.fatima.heartbeatsql=select 1
+datasource.fatima.isolationlevel=read_committed
+
+datasource.solange.username=root
+datasource.solange.password=eficaztecnologia2015
+datasource.solange.databaseUrl=jdbc:mysql://localhost/sismed2
+datasource.solange.databaseDriver=com.mysql.jdbc.Driver
+datasource.solange.minConnections=1
+datasource.solange.maxConnections=25
+datasource.solange.heartbeatsql=select 1
+datasource.solange.isolationlevel=read_committed
+
+ebean.classes=com.eficaztech.sismed.model.Cid,com.eficaztech.sismed.model.Cliente,com.eficaztech.sismed.model.Consulta,com.eficaztech.sismed.model.Empresa, com.eficaztech.sismed.model.GuiaConsulta, com.eficaztech.sismed.model.GuiaSADT,com.eficaztech.sismed.model.Lote,com.eficaztech.sismed.model.Medicamento,com.eficaztech.sismed.model.Medico,com.eficaztech.sismed.model.OutraDespesa,com.eficaztech.sismed.model.PlanoSaude,com.eficaztech.sismed.model.ProcedimentoExecutado,com.eficaztech.sismed.model.Usuario 

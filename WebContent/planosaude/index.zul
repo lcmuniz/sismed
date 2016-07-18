@@ -1,0 +1,82 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Plano de Saúde"?>
+<window id="planoWindow" title="Plano de Saúde" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.PlanoSaudeView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox>
+			<button iconSclass="z-icon-plus" label="Novo" onClick="@command('novo')" />
+			<separator />
+			<label value="Procurar por" />
+			<textbox id="filtroTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="_ Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="planoListbox" model="@bind(vm.planos)" mold="paging" autopaging="true" vflex="true" selectedItem="@bind(vm.planoSelecionado)">
+		<listhead>
+			<listheader label="Nome" />
+			<listheader hflex="min" label="Prazo de Retorno (dias)" />
+			<listheader hflex="min" label="Registro ANS" />
+			<listheader hflex="min" label="Valor da Consulta" />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem>
+				<listcell label="@load(item.nome)" />
+				<listcell label="@load(item.prazoRetorno)" />
+				<listcell label="@load(item.registroANS)" />
+				<listcell label="@load(item.valorConsulta)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<window id="editWindow" visible="false" width="50%" border="normal">
+
+		<groupbox>
+			<hbox>
+				<button iconSclass="z-icon-check" label="Salvar" onClick="@command('salvar')" />
+				<button iconSclass="z-icon-trash-o" id="excluirButton" label="Excluir" onClick="@command('excluir')" />
+				<button iconSclass="z-icon-ban" label="Cancelar" onClick="@command('cancelar')" />
+			</hbox>
+		</groupbox>
+
+		<separator />
+
+		<box>
+			<vbox>
+				<label value="Nome" />
+				<textbox id="nomeTextbox" value="@bind(vm.planoSelecionado.nome)" maxlength="50" cols="50" />
+				<label id="e_nome" />
+			</vbox>
+
+			<vbox>
+				<label value="Prazo de Retorno (dias)" />
+				<spinner value="@bind(vm.planoSelecionado.prazoRetorno)" maxlength="2" cols="2" constraint="min 1 max 31" />
+				<label id="e_prazoRetorno" />
+			</vbox>
+
+			<vbox>
+				<label value="Registro ANS" />
+				<intbox value="@bind(vm.planoSelecionado.registroANS)" maxlength="6" cols="6" />
+				<label id="e_registroANS" />
+			</vbox>
+
+			<vbox>
+				<label value="Valor da Consulta" />
+				<decimalbox value="@bind(vm.planoSelecionado.valorConsulta)" maxlength="10" cols="10" format="#,##0.##" />
+				<label id="e_valorConsulta" />
+			</vbox>
+
+		</box>
+
+	</window>
+
+</window>
+

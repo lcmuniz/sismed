@@ -1,0 +1,53 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/template.zul"?>
+<?page title="Consulta"?>
+<window id="consultaWindow" title="Consulta" border="normal" hflex="true" vflex="true" viewModel="@id('vm')@init('com.eficaztech.sismed.view.ConsultaView')" apply="org.zkoss.bind.BindComposer"
+	self="@{define(content)}">
+
+	<groupbox>
+		<hbox hflex="true">
+			<button iconSclass="z-icon-plus" label="Nova" onClick="@command('novo')" />
+			<separator />
+			<label value="Cliente" />
+			<textbox id="filtroClienteTextbox" hflex="true" onOK="@command('pesquisar')" />
+			<label value="Entre" />
+			<datebox id="filtroInicioDatebox" onOK="@command('pesquisar')" />
+			<label value="e" />
+			<datebox id="filtroFimDatebox" onOK="@command('pesquisar')" />
+			<button iconSclass="z-icon-search" label="Pesquisar" onClick="@command('pesquisar')" />
+			<button label="Limpar" onClick="@command('limpar')" />
+		</hbox>
+	</groupbox>
+
+	<separator />
+
+	<listbox id="consultaListbox" model="@bind(vm.consultas)" mold="paging" autopaging="true" vflex="true">
+		<listhead>
+			<listheader label="Cliente" />
+			<listheader hflex="min" label="Idade" />
+			<listheader hflex="min" label="Data" />
+			<listheader hflex="min" label="Hora" />
+			<listheader hflex="min" label="Médico" />
+			<listheader hflex="min" label="Plano de Saúde" />
+			<listheader hflex="min" label="Ret." />
+			<listheader hflex="min" label="Proc." />
+			<listheader hflex="min" label="Ações" />
+		</listhead>
+		<template name="model" var="item">
+			<listitem style="@load(item.styleRow)">
+				<listcell label="@load(item.cliente.nome)" />
+				<listcell label="@load(item.cliente.idade)" />
+				<listcell label="@load(item.dataBR)" />
+				<listcell label="@load(item.hora)" />
+				<listcell label="@load(item.medico.nome)" />
+				<listcell label="@load(item.planoSaude.nome)" />
+				<listcell iconSclass="@load(item.retornoIcon)" />
+				<listcell iconSclass="@load(item.procedimentoIcon)" />
+				<listcell>
+					<button iconSclass="z-icon-edit" onClick="@command('editar', id=item.id)" tooltiptext="Editar" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+</window>
+
