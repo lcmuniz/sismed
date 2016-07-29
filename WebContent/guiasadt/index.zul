@@ -160,7 +160,7 @@
 									<vbox>
 										<hbox hflex="true">
 											<vbox>
-												<label value="Data doa Solicitação" />
+												<label value="Data da Solicitação" />
 												<datebox value="@bind(vm.guiaSelecionada.dataSolicitacao)" />
 												<label id="e_dataSolicitacao" />
 											</vbox>
@@ -360,7 +360,7 @@
 					<hbox hflex="true">
 						<vbox>
 							<label value="Código do Procedimento" />
-							<textbox value="@bind(vm.procedimentoSelecionado.codigoProcedimento)" maxlength="10" cols="10" />
+							<intbox value="@bind(vm.procedimentoSelecionado.codigoProcedimento)" maxlength="10" cols="10" />
 							<label id="e_codigoProcedimento" />
 						</vbox>
 						<vbox hflex="true">

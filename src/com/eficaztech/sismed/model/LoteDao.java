@@ -33,7 +33,7 @@ public class LoteDao {
 	}
 
 	public List<Lote> find(String tipoLote, String medico, String planoSaude) {
-		String sql = "find lote where tipoLote = :tipoLote and medico.nome = :medico and planoSaude.nome = :planoSaude";
+		String sql = "find lote where tipoLote = :tipoLote and medico.nome = :medico and planoSaude.nome = :planoSaude order by id desc";
 		Query<Lote> query = SismedServer.ebean.createQuery(Lote.class, sql).setParameter("tipoLote", tipoLote).setParameter("medico", medico).setParameter("planoSaude", planoSaude);
 		return query.findList();
 	}

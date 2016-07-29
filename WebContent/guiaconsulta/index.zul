@@ -148,7 +148,7 @@
 							</vbox>
 							<vbox>
 								<label value="Código do Procedimento" />
-								<textbox value="@bind(vm.guiaSelecionada.codigoProcedimento)" maxlength="10" cols="10" />
+								<intbox value="@bind(vm.guiaSelecionada.codigoProcedimento)" maxlength="10" cols="10" />
 								<label id="e_codigoProcedimento" />
 							</vbox>
 							<vbox>
