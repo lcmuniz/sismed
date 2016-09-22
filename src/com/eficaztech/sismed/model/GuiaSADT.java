@@ -332,6 +332,16 @@ public class GuiaSADT {
 		return format.format(getDataSolicitacao());
 	}
 
+	public String getDataAutorizacaoBR() {
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return format.format(dataAutorizacao);
+	}
+	
+	public String getDataValidadeSenhaBR() {
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return format.format(dataValidadeSenha);
+	}
+	
 	public List<ProcedimentoExecutado> getProcedimentosExecutados() {
 		return procedimentosExecutados;
 	}

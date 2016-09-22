@@ -235,6 +235,13 @@ public class Lote {
 				xml += "<ans:registroANS>" + this.planoSaude.getRegistroANS() + "</ans:registroANS>";
 				xml += "<ans:numeroGuiaPrestador>" + guia.getNumeroGuia() + "</ans:numeroGuiaPrestador>";
 				xml += "</ans:cabecalhoGuia>";
+				
+				xml += "<ans:dadosAutorizacao>";
+				xml += "<ans:dataAutorizacao>" + guia.getDataAutorizacaoBR() + "</ans:dataAutorizacao>";
+				xml += "<ans:senha>" + guia.getSenha() + "</ans:senha>";
+				xml += "<ans:dataValidadeSenha>" + guia.getDataValidadeSenhaBR() + "</ans:dataValidadeSenha>";
+				xml += "</ans:dadosAutorizacao>";
+				
 				xml += "<ans:dadosBeneficiario>";
 				xml += "<ans:numeroCarteira>" + guia.getCarteira() + "</ans:numeroCarteira>";
 				xml += "<ans:atendimentoRN>" + guia.getAtendimentoRN().name() + "</ans:atendimentoRN>";
